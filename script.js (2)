@@ -1,0 +1,66 @@
+let currentPage = 1;
+const tableBody = document.querySelector('#tokensTable tbody');
+
+function loadTokens(page) {
+  // Mostrar el indicador de carga
+  tableBody.innerHTML = '<tr><td colspan="5" class="loading">Loading...</td></tr>';
+
+  const apiUrl = `https://api.allorigins.win/raw?url=https://www.clanker.world/api/tokens?page=${page}`;
+  fetch(apiUrl)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Request error: ' + response.status);
+      }
+      return response.json();
+    })
+    .then(data => {
+      const tokens = data.data;
+      if (!tokens || tokens.length === 0) {
+        tableBody.innerHTML = '<tr><td colspan="5">No tokens found</td></tr>';
+        return;
+      }
+      // Limpiar el indicador de carga y mostrar los datos
+      tableBody.innerHTML = '';
+      tokens.forEach(token => {
+        const row = `<tr>
+          <td>${token.name}</td>
+          <td>${token.symbol}</td>
+          <td><a href="https://basescan.org/address/${token.contract_address}" target="_blank">View</a></td>
+          <td>${new Date(token.created_at).toLocaleDateString()}</td>
+          <td><a href="https://basescan.org/address/${token.pool_address}" target="_blank">View</a></td>
+        </tr>`;
+        tableBody.innerHTML += row;
+      });
+    })
+    .catch(error => {
+      // Mostrar un mensaje de error si la carga falla
+      tableBody.innerHTML = '<tr><td colspan="5">Error loading tokens: ' + error.message + '</td></tr>';
+    });
+}
+
+// Carga la primera página al iniciar
+loadTokens(currentPage);
+
+// Botones de paginación
+document.getElementById('next').addEventListener('click', () => {
+  currentPage++;
+  loadTokens(currentPage);
+});
+
+document.getElementById('prev').addEventListener('click', () => {
+  if (currentPage > 1) {
+    currentPage--;
+    loadTokens(currentPage);
+  }
+});
+
+// Funcionalidad de búsqueda
+document.getElementById('search').addEventListener('input', function() {
+  const searchTerm = this.value.toLowerCase();
+  const rows = document.querySelectorAll('#tokensTable tbody tr');
+  rows.forEach(row => {
+    const name = row.cells[0].textContent.toLowerCase();
+    const symbol = row.cells[1].textContent.toLowerCase();
+    row.style.display = (name.includes(searchTerm) || symbol.includes(searchTerm)) ? '' : 'none';
+  });
+});
