@@ -7,8 +7,30 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <h1>ChainVibe: Clanker Tokens</h1>
-  <input type="text" id="search" placeholder="Search by name or symbol">
+  <div class="header">
+    <h1>ChainVibe: Clanker Tokens</h1>
+    <button id="themeToggle">Toggle Theme</button>
+  </div>
+  <div class="filters">
+    <input type="text" id="search" placeholder="Search by name or symbol">
+    <select id="dateFilter">
+      <option value="all">All Dates</option>
+      <option value="last7days">Last 7 Days</option>
+      <option value="last30days">Last 30 Days</option>
+    </select>
+    <select id="typeFilter">
+      <option value="all">All Types</option>
+      <option value="clanker_v3_1">Clanker V3.1</option>
+    </select>
+    <select id="sortFilter">
+      <option value="date-desc">Newest First</option>
+      <option value="name-asc">Name (A-Z)</option>
+      <option value="name-desc">Name (Z-A)</option>
+      <option value="symbol-asc">Symbol (A-Z)</option>
+      <option value="symbol-desc">Symbol (Z-A)</option>
+    </select>
+    <button id="exportCSV">Export to CSV</button>
+  </div>
   <table id="tokensTable">
     <thead>
       <tr>
@@ -21,8 +43,13 @@
     </thead>
     <tbody></tbody>
   </table>
-  <button id="prev">Previous</button>
-  <button id="next">Next</button>
+  <div class="pagination">
+    <button id="prev">Previous</button>
+    <span id="pageInfo">Page 1</span>
+    <button id="next">Next</button>
+  </div>
+  <button id="scrollTop">⬆ Back to Top</button>
+  <div id="toast" class="toast"></div>
   <script src="script.js"></script>
 </body>
 </html>
