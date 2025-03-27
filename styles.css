@@ -80,6 +80,20 @@ button:disabled {
   cursor: not-allowed;
 }
 
+.token-count {
+  margin-bottom: 15px;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+body.dark .token-count {
+  color: #4CAF50;
+}
+
+body.light .token-count {
+  color: #333;
+}
+
 table {
   width: 100%;
   border-collapse: collapse;
@@ -195,5 +209,9 @@ td a:hover {
 
   input {
     padding: 8px;
+  }
+
+  .token-count {
+    font-size: 14px;
   }
 }

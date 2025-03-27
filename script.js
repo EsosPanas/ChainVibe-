@@ -6,6 +6,7 @@ const pageInfo = document.getElementById('pageInfo');
 const prevButton = document.getElementById('prev');
 const nextButton = document.getElementById('next');
 const toast = document.getElementById('toast');
+const tokenCount = document.getElementById('tokenCount');
 
 const savedTheme = localStorage.getItem('theme') || 'dark';
 document.body.classList.add(savedTheme);
@@ -105,6 +106,7 @@ function displayTokens() {
   tableBody.innerHTML = '';
   if (filteredTokens.length === 0) {
     tableBody.innerHTML = '<tr><td colspan="5">No tokens match your filters</td></tr>';
+    tokenCount.textContent = 'Mostrando 0 de ' + allTokens.length + ' tokens';
     return;
   }
 
@@ -118,6 +120,8 @@ function displayTokens() {
     </tr>`;
     tableBody.innerHTML += row;
   });
+
+  tokenCount.textContent = `Mostrando ${filteredTokens.length} de ${allTokens.length} tokens`;
 }
 
 function exportToCSV() {
