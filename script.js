@@ -124,6 +124,15 @@ function displayTokens() {
   tokenCount.textContent = `Mostrando ${filteredTokens.length} de ${allTokens.length} tokens`;
 }
 
+function clearFilters() {
+  document.getElementById('search').value = '';
+  document.getElementById('dateFilter').value = 'all';
+  document.getElementById('typeFilter').value = 'all';
+  document.getElementById('sortFilter').value = 'date-desc';
+  displayTokens();
+  showToast('Filters cleared!', 'success');
+}
+
 function exportToCSV() {
   const rows = document.querySelectorAll('#tokensTable tr');
   let csvContent = 'Name,Symbol,Contract,Creation Date,Liquidity Pool\n';
@@ -169,6 +178,7 @@ document.getElementById('dateFilter').addEventListener('change', displayTokens);
 document.getElementById('typeFilter').addEventListener('change', displayTokens);
 document.getElementById('sortFilter').addEventListener('change', displayTokens);
 document.getElementById('exportCSV').addEventListener('click', exportToCSV);
+document.getElementById('clearFilters').addEventListener('click', clearFilters);
 
 document.getElementById('themeToggle').addEventListener('click', () => {
   const currentTheme = document.body.classList.contains('dark') ? 'dark' : 'light';
