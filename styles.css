@@ -94,6 +94,20 @@ body.light .token-count {
   color: #333;
 }
 
+.token-stats {
+  margin-bottom: 20px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: #f9f9f9;
+}
+
+body.dark .token-stats {
+  border-color: #555;
+  background-color: #333;
+  color: #fff;
+}
+
 table {
   width: 100%;
   border-collapse: collapse;

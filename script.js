@@ -98,7 +98,7 @@ function displayTokens() {
   } else if (sortFilter === 'symbol-asc') {
     filteredTokens.sort((a, b) => a.symbol.localeCompare(b.symbol));
   } else if (sortFilter === 'symbol-desc') {
-    filteredTokens.sort((a, b) => b.symbol.localeCompare(b.symbol));
+    filteredTokens.sort((a, b) => b.symbol.localeCompare(a.symbol));
   } else {
     filteredTokens.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
   }
@@ -106,7 +106,8 @@ function displayTokens() {
   tableBody.innerHTML = '';
   if (filteredTokens.length === 0) {
     tableBody.innerHTML = '<tr><td colspan="5">No tokens match your filters</td></tr>';
-    tokenCount.textContent = 'Mostrando 0 de ' + allTokens.length + ' tokens';
+    tokenCount.textContent = 'Showing 0 of ' + allTokens.length + ' tokens';
+    document.getElementById('tokenStats').innerHTML = '';
     return;
   }
 
@@ -121,7 +122,23 @@ function displayTokens() {
     tableBody.innerHTML += row;
   });
 
-  tokenCount.textContent = `Mostrando ${filteredTokens.length} de ${allTokens.length} tokens`;
+  tokenCount.textContent = `Showing ${filteredTokens.length} of ${allTokens.length} tokens`;
+
+  if (filteredTokens.length > 0) {
+    const mostRecentToken = filteredTokens.reduce((prev, current) => {
+      return (new Date(prev.created_at) > new Date(current.created_at)) ? prev : current;
+    });
+    const longestNameToken = filteredTokens.reduce((prev, current) => {
+      return (prev.name.length > current.name.length) ? prev : current;
+    });
+
+    document.getElementById('tokenStats').innerHTML = `
+      <p>Most recent token: ${mostRecentToken.name} (Created on ${new Date(mostRecentToken.created_at).toLocaleDateString()})</p>
+      <p>Token with longest name: ${longestNameToken.name} (Length: ${longestNameToken.name.length})</p>
+    `;
+  } else {
+    document.getElementById('tokenStats').innerHTML = '';
+  }
 }
 
 function clearFilters() {
@@ -188,10 +205,12 @@ document.getElementById('themeToggle').addEventListener('click', () => {
   localStorage.setItem('theme', newTheme);
 });
 
+// Función para volver arriba
 function scrollToTop() {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
+// Mostrar/Ocultar botón según el scroll
 window.onscroll = function() {
   const scrollTopBtn = document.getElementById('scrollTop');
   if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
@@ -200,3 +219,6 @@ window.onscroll = function() {
     scrollTopBtn.style.display = 'none';
   }
 };
+
+// Conectar el clic del botón "Back to Top" con la función scrollToTop
+document.getElementById('scrollTop').addEventListener('click', scrollToTop);
