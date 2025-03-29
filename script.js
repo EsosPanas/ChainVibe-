@@ -7,6 +7,7 @@ const prevButton = document.getElementById('prev');
 const nextButton = document.getElementById('next');
 const toast = document.getElementById('toast');
 const tokenCount = document.getElementById('tokenCount');
+const tokenStats = document.getElementById('tokenStats');
 
 const savedTheme = localStorage.getItem('theme') || 'dark';
 document.body.classList.add(savedTheme);
@@ -35,9 +36,9 @@ function loadTokens(page) {
     updatePagination();
     return;
   }
-
+  
   tableBody.innerHTML = '<tr><td colspan="5" class="loading">Loading...</td></tr>';
-
+  
   const apiUrl = `https://api.allorigins.win/raw?url=https://www.clanker.world/api/tokens?page=${page}`;
   fetch(apiUrl)
     .then(response => {
@@ -47,8 +48,8 @@ function loadTokens(page) {
       return response.json();
     })
     .then(data => {
-      const tokens = data.data;
-      if (!tokens || tokens.length === 0) {
+      const tokens = data.data || [];
+      if (tokens.length === 0) {
         tableBody.innerHTML = '<tr><td colspan="5">No tokens found</td></tr>';
         showToast('No tokens found', 'error');
         return;
@@ -64,18 +65,40 @@ function loadTokens(page) {
     });
 }
 
+function updateTokenStats(filteredTokens) {
+  if (filteredTokens.length === 0) {
+    tokenStats.innerHTML = '<p>No tokens to display statistics.</p>';
+    return;
+  }
+  
+  const latestToken = filteredTokens.reduce((latest, current) => {
+    return new Date(current.created_at) > new Date(latest.created_at) ? current : latest;
+  });
+  
+  const longestNameToken = filteredTokens.reduce((longest, current) => {
+    return (current.name || '').length > (longest.name || '').length ? current : longest;
+  });
+  
+  tokenStats.innerHTML = `
+    <h3>Token Stats</h3>
+    <p><strong>Latest Token:</strong> ${latestToken.name || 'N/A'} (Created: ${new Date(latestToken.created_at).toLocaleDateString()})</p>
+    <p><strong>Longest Name:</strong> ${longestNameToken.name || 'N/A'} (${(longestNameToken.name || '').length} characters)</p>
+  `;
+}
+
 function displayTokens() {
   const searchTerm = document.getElementById('search').value.toLowerCase();
   const dateFilter = document.getElementById('dateFilter').value;
   const typeFilter = document.getElementById('typeFilter').value;
   const sortFilter = document.getElementById('sortFilter').value;
-
+  const lengthFilter = document.getElementById('lengthFilter').value;
+  
   let filteredTokens = allTokens.filter(token => {
-    const name = token.name.toLowerCase();
-    const symbol = token.symbol.toLowerCase();
+    const name = (token.name || '').toLowerCase();
+    const symbol = (token.symbol || '').toLowerCase();
     const matchesSearch = name.includes(searchTerm) || symbol.includes(searchTerm);
-
-    const tokenDate = new Date(token.created_at);
+    
+    const tokenDate = new Date(token.created_at || 0);
     const now = new Date();
     let matchesDate = true;
     if (dateFilter === 'last7days') {
@@ -85,60 +108,47 @@ function displayTokens() {
       const cutoffDate = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
       matchesDate = tokenDate >= cutoffDate;
     }
-
+    
     const matchesType = typeFilter === 'all' || token.tipo === typeFilter;
-
-    return matchesSearch && matchesDate && matchesType;
+    
+    const matchesLength = lengthFilter === 'all' || (token.name || '').length > parseInt(lengthFilter);
+    
+    return matchesSearch && matchesDate && matchesType && matchesLength;
   });
-
+  
   if (sortFilter === 'name-asc') {
-    filteredTokens.sort((a, b) => a.name.localeCompare(b.name));
+    filteredTokens.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
   } else if (sortFilter === 'name-desc') {
-    filteredTokens.sort((a, b) => b.name.localeCompare(a.name));
+    filteredTokens.sort((a, b) => (b.name || '').localeCompare(a.name || ''));
   } else if (sortFilter === 'symbol-asc') {
-    filteredTokens.sort((a, b) => a.symbol.localeCompare(b.symbol));
+    filteredTokens.sort((a, b) => (a.symbol || '').localeCompare(b.symbol || ''));
   } else if (sortFilter === 'symbol-desc') {
-    filteredTokens.sort((a, b) => b.symbol.localeCompare(a.symbol));
+    filteredTokens.sort((a, b) => (b.symbol || '').localeCompare(a.symbol || ''));
   } else {
-    filteredTokens.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+    filteredTokens.sort((a, b) => new Date(b.created_at || 0) - new Date(a.created_at || 0));
   }
-
+  
   tableBody.innerHTML = '';
   if (filteredTokens.length === 0) {
     tableBody.innerHTML = '<tr><td colspan="5">No tokens match your filters</td></tr>';
     tokenCount.textContent = 'Showing 0 of ' + allTokens.length + ' tokens';
-    document.getElementById('tokenStats').innerHTML = '';
+    updateTokenStats(filteredTokens);
     return;
   }
-
+  
   filteredTokens.forEach(token => {
     const row = `<tr>
-      <td>${token.name}</td>
-      <td>${token.symbol}</td>
-      <td><a href="https://basescan.org/address/${token.contract_address}" target="_blank">View</a></td>
-      <td>${new Date(token.created_at).toLocaleDateString()}</td>
-      <td><a href="https://basescan.org/address/${token.pool_address}" target="_blank">View</a></td>
+      <td>${token.name || 'N/A'}</td>
+      <td>${token.symbol || 'N/A'}</td>
+      <td><a href="https://basescan.org/address/${token.contract_address || '#'}" target="_blank">View</a></td>
+      <td>${token.created_at ? new Date(token.created_at).toLocaleDateString() : 'N/A'}</td>
+      <td><a href="https://basescan.org/address/${token.pool_address || '#'}" target="_blank">View</a></td>
     </tr>`;
     tableBody.innerHTML += row;
   });
-
+  
   tokenCount.textContent = `Showing ${filteredTokens.length} of ${allTokens.length} tokens`;
-
-  if (filteredTokens.length > 0) {
-    const mostRecentToken = filteredTokens.reduce((prev, current) => {
-      return (new Date(prev.created_at) > new Date(current.created_at)) ? prev : current;
-    });
-    const longestNameToken = filteredTokens.reduce((prev, current) => {
-      return (prev.name.length > current.name.length) ? prev : current;
-    });
-
-    document.getElementById('tokenStats').innerHTML = `
-      <p>Most recent token: ${mostRecentToken.name} (Created on ${new Date(mostRecentToken.created_at).toLocaleDateString()})</p>
-      <p>Token with longest name: ${longestNameToken.name} (Length: ${longestNameToken.name.length})</p>
-    `;
-  } else {
-    document.getElementById('tokenStats').innerHTML = '';
-  }
+  updateTokenStats(filteredTokens);
 }
 
 function clearFilters() {
@@ -146,6 +156,7 @@ function clearFilters() {
   document.getElementById('dateFilter').value = 'all';
   document.getElementById('typeFilter').value = 'all';
   document.getElementById('sortFilter').value = 'date-desc';
+  document.getElementById('lengthFilter').value = 'all';
   displayTokens();
   showToast('Filters cleared!', 'success');
 }
@@ -153,7 +164,7 @@ function clearFilters() {
 function exportToCSV() {
   const rows = document.querySelectorAll('#tokensTable tr');
   let csvContent = 'Name,Symbol,Contract,Creation Date,Liquidity Pool\n';
-
+  
   rows.forEach(row => {
     if (row.querySelector('td')) {
       const cells = row.querySelectorAll('td');
@@ -167,7 +178,7 @@ function exportToCSV() {
       csvContent += rowData.join(',') + '\n';
     }
   });
-
+  
   const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
   const link = document.createElement('a');
   link.href = URL.createObjectURL(blob);
@@ -194,6 +205,7 @@ document.getElementById('search').addEventListener('input', displayTokens);
 document.getElementById('dateFilter').addEventListener('change', displayTokens);
 document.getElementById('typeFilter').addEventListener('change', displayTokens);
 document.getElementById('sortFilter').addEventListener('change', displayTokens);
+document.getElementById('lengthFilter').addEventListener('change', displayTokens);
 document.getElementById('exportCSV').addEventListener('click', exportToCSV);
 document.getElementById('clearFilters').addEventListener('click', clearFilters);
 
@@ -205,12 +217,10 @@ document.getElementById('themeToggle').addEventListener('click', () => {
   localStorage.setItem('theme', newTheme);
 });
 
-// Función para volver arriba
 function scrollToTop() {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// Mostrar/Ocultar botón según el scroll
 window.onscroll = function() {
   const scrollTopBtn = document.getElementById('scrollTop');
   if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
@@ -220,5 +230,4 @@ window.onscroll = function() {
   }
 };
 
-// Conectar el clic del botón "Back to Top" con la función scrollToTop
 document.getElementById('scrollTop').addEventListener('click', scrollToTop);

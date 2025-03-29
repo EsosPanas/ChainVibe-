@@ -1,7 +1,7 @@
 body {
   font-family: Arial, sans-serif;
-  padding: 20px;
   margin: 0;
+  padding: 15px; /* Reducido de 20px para mejor ajuste en móviles */
   transition: background-color 0.3s, color 0.3s;
 }
 
@@ -12,7 +12,7 @@ body.dark {
 
 body.light {
   background-color: #f4f4f4;
-  color: #333;
+  color: #333333;
 }
 
 .header {
@@ -20,92 +20,101 @@ body.light {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
+  flex-wrap: wrap; /* Permite que el botón de tema se ajuste en móviles */
 }
 
-h1 {
-  text-align: center;
+.header h1 {
+  font-size: 24px; /* Tamaño ajustado para móviles */
   margin: 0;
-  color: #4CAF50;
 }
 
 .filters {
   display: flex;
-  flex-wrap: wrap;
   gap: 10px;
   margin-bottom: 20px;
+  flex-wrap: wrap; /* Asegura que los filtros se apilen en pantallas pequeñas */
 }
 
-input, select, button {
+.filters input, .filters select, .filters button {
   padding: 8px;
-  border: 1px solid #555;
+  font-size: 14px;
+  border: 1px solid #ccc;
   border-radius: 4px;
-  box-sizing: border-box;
+  width: 100%; /* Ocupa todo el ancho disponible */
+  max-width: 150px; /* Limita el ancho máximo en pantallas grandes */
+  box-sizing: border-box; /* Incluye padding y border en el ancho */
 }
 
-body.dark input, body.dark select, body.dark button {
-  background-color: #333;
-  color: #fff;
-}
-
-body.light input, body.light select, body.light button {
-  background-color: #fff;
-  color: #333;
-}
-
-input {
-  flex: 1;
-  min-width: 200px;
-}
-
-select {
-  width: 150px;
-}
-
-button {
-  padding: 8px 16px;
-  background-color: #4CAF50;
+.filters button {
+  background-color: #007bff;
   color: white;
   border: none;
-  border-radius: 4px;
   cursor: pointer;
-  margin-right: 10px;
+  transition: background-color 0.3s;
 }
 
-button:hover {
-  background-color: #45a049;
+.filters button:hover {
+  background-color: #0056b3;
 }
 
-button:disabled {
-  background-color: #666;
-  cursor: not-allowed;
+body.dark .filters input, body.dark .filters select {
+  background-color: #333;
+  color: #fff;
+  border-color: #555;
+}
+
+body.dark .filters button {
+  background-color: #0056b3;
+}
+
+body.dark .filters button:hover {
+  background-color: #003d82;
 }
 
 .token-count {
-  margin-bottom: 15px;
-  font-size: 16px;
+  margin-bottom: 10px;
   font-weight: bold;
-}
-
-body.dark .token-count {
-  color: #4CAF50;
-}
-
-body.light .token-count {
-  color: #333;
+  font-size: 14px; /* Tamaño legible en móviles */
 }
 
 .token-stats {
   margin-bottom: 20px;
-  padding: 10px;
+  padding: 15px;
   border: 1px solid #ddd;
-  border-radius: 4px;
-  background-color: #f9f9f9;
+  border-radius: 6px; /* Bordes más suaves */
+  background-color: #fff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /* Sombra más pronunciada para profundidad */
 }
 
 body.dark .token-stats {
   border-color: #555;
   background-color: #333;
-  color: #fff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+.token-stats h3 {
+  margin: 0 0 12px; /* Espaciado más generoso */
+  font-size: 16px;
+  font-weight: 600; /* Negrita ligera para destacar */
+  color: #007bff; /* Color consistente con el tema */
+}
+
+body.dark .token-stats h3 {
+  color: #66b0ff;
+}
+
+.token-stats p {
+  margin: 8px 0; /* Más espacio entre líneas */
+  font-size: 14px;
+  line-height: 1.4; /* Mejora la legibilidad */
+}
+
+.token-stats strong {
+  color: #007bff;
+}
+
+body.dark .token-stats strong {
+  color: #66b0ff;
 }
 
 table {
@@ -114,40 +123,28 @@ table {
   margin-bottom: 20px;
 }
 
-body.dark table {
-  background-color: #2a2a2a;
-}
-
-body.light table {
-  background-color: #fff;
-}
-
 th, td {
-  padding: 12px;
+  padding: 10px;
   text-align: left;
-  border-bottom: 1px solid #444;
-}
-
-body.light th, body.light td {
   border-bottom: 1px solid #ddd;
+  font-size: 14px; /* Tamaño ajustado para móviles */
 }
 
 th {
-  font-weight: bold;
+  background-color: #007bff;
+  color: white;
 }
 
 body.dark th {
-  background-color: #3a3a3a;
-  color: #ffffff;
+  background-color: #0056b3;
 }
 
-body.light th {
-  background-color: #e0e0e0;
-  color: #333;
+body.dark td {
+  border-bottom: 1px solid #555;
 }
 
 td a {
-  color: #4CAF50;
+  color: #007bff;
   text-decoration: none;
 }
 
@@ -155,77 +152,144 @@ td a:hover {
   text-decoration: underline;
 }
 
+body.dark td a {
+  color: #66b0ff;
+}
+
 .loading {
   text-align: center;
-  font-style: italic;
   color: #888;
+  font-size: 14px;
 }
 
-#scrollTop {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  padding: 10px;
-  background-color: #4CAF50;
-  color: white;
-  border: none;
-  border-radius: 50%;
-  cursor: pointer;
-  display: none;
-}
-
-#scrollTop:hover {
-  background-color: #45a049;
+body.dark .loading {
+  color: #aaa;
 }
 
 .pagination {
   display: flex;
   justify-content: center;
-  align-items: center;
   gap: 10px;
-  margin-top: 10px;
+  margin-bottom: 20px;
+  flex-wrap: wrap; /* Permite ajuste en móviles */
 }
 
-#pageInfo {
+.pagination button {
+  padding: 8px 16px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  font-size: 14px;
+}
+
+.pagination button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+body.dark .pagination button {
+  background-color: #0056b3;
+}
+
+body.dark .pagination button:disabled {
+  background-color: #555;
+}
+
+.pagination button:hover:not(:disabled) {
+  background-color: #0056b3;
+}
+
+body.dark .pagination button:hover:not(:disabled) {
+  background-color: #003d82;
+}
+
+#scrollTop {
+  position: fixed;
+  bottom: 15px; /* Ajustado para móviles */
+  right: 15px;
+  padding: 10px 15px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  display: none;
+  transition: background-color 0.3s;
   font-size: 16px;
+}
+
+#scrollTop:hover {
+  background-color: #0056b3;
+}
+
+body.dark #scrollTop {
+  background-color: #0056b3;
+}
+
+body.dark #scrollTop:hover {
+  background-color: #003d82;
 }
 
 .toast {
   position: fixed;
-  top: 20px;
-  right: 20px;
+  bottom: 15px; /* Ajustado para móviles */
+  left: 50%;
+  transform: translateX(-50%);
   padding: 10px 20px;
   border-radius: 4px;
+  color: white;
   display: none;
-  z-index: 1000;
+  font-size: 14px;
+  max-width: 90%; /* Evita que se salga en pantallas pequeñas */
+  text-align: center;
 }
 
 .toast.success {
-  background-color: #4CAF50;
-  color: white;
+  background-color: #28a745;
 }
 
 .toast.error {
-  background-color: #f44336;
-  color: white;
+  background-color: #dc3545;
 }
 
+/* Media Queries para pantallas móviles */
 @media (max-width: 600px) {
+  .header h1 {
+    font-size: 20px;
+  }
+
+  .filters input, .filters select, .filters button {
+    max-width: 100%; /* Ocupa todo el ancho en móviles */
+    margin-bottom: 10px; /* Espacio entre elementos apilados */
+  }
+
+  .filters {
+    flex-direction: column; /* Apila los filtros verticalmente */
+    align-items: stretch;
+  }
+
   th, td {
-    padding: 8px;
+    padding: 8px; /* Reduce el padding en tablas */
+    font-size: 12px; /* Texto más pequeño para ajustar contenido */
+  }
+
+  .pagination button {
+    padding: 6px 12px; /* Botones más pequeños */
+    font-size: 12px;
+  }
+
+  .token-stats {
+    padding: 10px; /* Reduce el padding en móviles */
+  }
+
+  .token-stats h3 {
     font-size: 14px;
   }
 
-  button, select {
-    padding: 6px 12px;
-    font-size: 14px;
-  }
-
-  input {
-    padding: 8px;
-  }
-
-  .token-count {
-    font-size: 14px;
+  .token-stats p {
+    font-size: 12px;
   }
 }
