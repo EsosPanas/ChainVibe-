@@ -1,7 +1,7 @@
 body {
   font-family: Arial, sans-serif;
   margin: 0;
-  padding: 15px; /* Reducido de 20px para mejor ajuste en móviles */
+  padding: 15px;
   transition: background-color 0.3s, color 0.3s;
 }
 
@@ -20,11 +20,11 @@ body.light {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
-  flex-wrap: wrap; /* Permite que el botón de tema se ajuste en móviles */
+  flex-wrap: wrap;
 }
 
 .header h1 {
-  font-size: 24px; /* Tamaño ajustado para móviles */
+  font-size: 24px;
   margin: 0;
 }
 
@@ -32,7 +32,7 @@ body.light {
   display: flex;
   gap: 10px;
   margin-bottom: 20px;
-  flex-wrap: wrap; /* Asegura que los filtros se apilen en pantallas pequeñas */
+  flex-wrap: wrap;
 }
 
 .filters input, .filters select, .filters button {
@@ -40,9 +40,9 @@ body.light {
   font-size: 14px;
   border: 1px solid #ccc;
   border-radius: 4px;
-  width: 100%; /* Ocupa todo el ancho disponible */
-  max-width: 150px; /* Limita el ancho máximo en pantallas grandes */
-  box-sizing: border-box; /* Incluye padding y border en el ancho */
+  width: 100%;
+  max-width: 150px;
+  box-sizing: border-box;
 }
 
 .filters button {
@@ -74,16 +74,16 @@ body.dark .filters button:hover {
 .token-count {
   margin-bottom: 10px;
   font-weight: bold;
-  font-size: 14px; /* Tamaño legible en móviles */
+  font-size: 14px;
 }
 
 .token-stats {
   margin-bottom: 20px;
   padding: 15px;
   border: 1px solid #ddd;
-  border-radius: 6px; /* Bordes más suaves */
+  border-radius: 6px;
   background-color: #fff;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /* Sombra más pronunciada para profundidad */
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
 body.dark .token-stats {
@@ -93,10 +93,10 @@ body.dark .token-stats {
 }
 
 .token-stats h3 {
-  margin: 0 0 12px; /* Espaciado más generoso */
+  margin: 0 0 12px;
   font-size: 16px;
-  font-weight: 600; /* Negrita ligera para destacar */
-  color: #007bff; /* Color consistente con el tema */
+  font-weight: 600;
+  color: #007bff;
 }
 
 body.dark .token-stats h3 {
@@ -104,9 +104,9 @@ body.dark .token-stats h3 {
 }
 
 .token-stats p {
-  margin: 8px 0; /* Más espacio entre líneas */
+  margin: 8px 0;
   font-size: 14px;
-  line-height: 1.4; /* Mejora la legibilidad */
+  line-height: 1.4;
 }
 
 .token-stats strong {
@@ -127,7 +127,7 @@ th, td {
   padding: 10px;
   text-align: left;
   border-bottom: 1px solid #ddd;
-  font-size: 14px; /* Tamaño ajustado para móviles */
+  font-size: 14px;
 }
 
 th {
@@ -171,7 +171,7 @@ body.dark .loading {
   justify-content: center;
   gap: 10px;
   margin-bottom: 20px;
-  flex-wrap: wrap; /* Permite ajuste en móviles */
+  flex-wrap: wrap;
 }
 
 .pagination button {
@@ -208,7 +208,7 @@ body.dark .pagination button:hover:not(:disabled) {
 
 #scrollTop {
   position: fixed;
-  bottom: 15px; /* Ajustado para móviles */
+  bottom: 15px;
   right: 15px;
   padding: 10px 15px;
   background-color: #007bff;
@@ -235,7 +235,7 @@ body.dark #scrollTop:hover {
 
 .toast {
   position: fixed;
-  bottom: 15px; /* Ajustado para móviles */
+  bottom: 15px;
   left: 50%;
   transform: translateX(-50%);
   padding: 10px 20px;
@@ -243,7 +243,7 @@ body.dark #scrollTop:hover {
   color: white;
   display: none;
   font-size: 14px;
-  max-width: 90%; /* Evita que se salga en pantallas pequeñas */
+  max-width: 90%;
   text-align: center;
 }
 
@@ -255,6 +255,62 @@ body.dark #scrollTop:hover {
   background-color: #dc3545;
 }
 
+/* Nuevos estilos para la tabla de proyectos y gráficos */
+h2 {
+  font-size: 20px;
+  margin: 20px 0 10px;
+  color: #333;
+}
+
+body.dark h2 {
+  color: #fff;
+}
+
+#projectsTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+#projectsTable th, #projectsTable td {
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+  font-size: 14px;
+}
+
+#projectsTable th {
+  background-color: #007bff;
+  color: white;
+}
+
+body.dark #projectsTable th {
+  background-color: #0056b3;
+}
+
+body.dark #projectsTable td {
+  border-bottom: 1px solid #555;
+}
+
+.charts {
+  margin-bottom: 20px;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background-color: #fff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+body.dark .charts {
+  border-color: #555;
+  background-color: #333;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+.charts h2 {
+  margin-top: 0;
+}
+
 /* Media Queries para pantallas móviles */
 @media (max-width: 600px) {
   .header h1 {
@@ -262,34 +318,43 @@ body.dark #scrollTop:hover {
   }
 
   .filters input, .filters select, .filters button {
-    max-width: 100%; /* Ocupa todo el ancho en móviles */
-    margin-bottom: 10px; /* Espacio entre elementos apilados */
+    max-width: 100%;
+    margin-bottom: 10px;
   }
 
   .filters {
-    flex-direction: column; /* Apila los filtros verticalmente */
+    flex-direction: column;
     align-items: stretch;
   }
 
   th, td {
-    padding: 8px; /* Reduce el padding en tablas */
-    font-size: 12px; /* Texto más pequeño para ajustar contenido */
-  }
-
-  .pagination button {
-    padding: 6px 12px; /* Botones más pequeños */
+    padding: 8px;
     font-size: 12px;
   }
 
-  .token-stats {
-    padding: 10px; /* Reduce el padding en móviles */
+  .pagination button {
+    padding: 6px 12px;
+    font-size: 12px;
   }
 
-  .token-stats h3 {
+  .token-stats, .charts {
+    padding: 10px;
+  }
+
+  .token-stats h3, .charts h2 {
     font-size: 14px;
   }
 
   .token-stats p {
+    font-size: 12px;
+  }
+
+  h2 {
+    font-size: 18px;
+  }
+
+  #projectsTable th, #projectsTable td {
+    padding: 8px;
     font-size: 12px;
   }
 }
